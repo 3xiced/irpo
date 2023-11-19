@@ -1,0 +1,27 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:latest
+    container_name: db
+    environment:
+      POSTGRES_USER: 'user'
+      POSTGRES_PASSWORD: 'secretpassw0rd'
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  api:
+    container_name: api
+    build: .
+    command: poetry run python src
+    env_file: .env
+    links:
+      - db
+    ports:
+      - 8585:8000
+
+volumes:
+  db-data:
+

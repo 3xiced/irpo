@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "api"
+version = "0.1.0"
+description = ""
+authors = ["3xiced"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.103.1"
+loguru = "^0.7.2"
+uvicorn = "^0.23.2"
+sqlalchemy = "^2.0.21"
+pydantic = {extras = ["email"], version = "^2.4.1"}
+pydantic-settings = "^2.0.3"
+asyncpg = "^0.28.0"
+python-jose = "^3.3.0"
+passlib = "^1.7.4"
+python-multipart = "^0.0.6"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.2"
+httpx = "^0.25.0"
+pytest-asyncio = "^0.21.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
