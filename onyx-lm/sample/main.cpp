@@ -2,6 +2,6 @@
 
 int main() {
     onyx::Onyx _onyx;
-    _onyx.auth("a", "b");
+    _onyx.Auth("a", "b");
     return 0;
 }

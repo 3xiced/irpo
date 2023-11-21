@@ -1,29 +1,28 @@
-import uuid
-
-from sqlalchemy import Column, ForeignKey, String, Date, Boolean
-from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, ForeignKey, String, Boolean
+from sqlalchemy.orm import Mapped, mapped_column
 
 from ..connection import base
 
 
-class UserInfo(base):
-    __tablename__ = "user_settings"
+class Device(base):
+    __tablename__ = "devices"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"))
-    last_login = Column(Date)
-    device_sn = Column(String)
-    active = Column(Boolean)
-    logged = Column(Boolean)
+    sn = Column(String, primary_key=True)
+    is_blocked = Column(Boolean, default=False)
 
 
 class User(base):
     __tablename__ = "users"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    login = Column(String, unique=True)
+    login = Column(String, primary_key=True)
     password = Column(String)
     email = Column(String, unique=True)
+    is_blocked = Column(Boolean)  # Статус пользователя - заплокирована ли учетка
+    logged = Column(Boolean)  # Статус пользователя - активен ли в текущий момент
 
-    info: UserInfo = relationship("UserInfo")
+
+class UserDevice(base):
+    __tablename__ = "user_device"
+
+    user_login: Mapped[str] = mapped_column(ForeignKey("users.login"), primary_key=True)
+    device_sn: Mapped[str] = mapped_column(ForeignKey("devices.sn"), primary_key=True)

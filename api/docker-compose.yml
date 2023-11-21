@@ -12,6 +12,19 @@ services:
     ports:
       - 5432:5432
 
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      POSTGRES_USER: 'user'
+      POSTGRES_PASSWORD: 'secretpassw0rd'
+      PGADMIN_DEFAULT_EMAIL: 'pgadmin4@pgadmin.org'
+      PGADMIN_DEFAULT_PASSWORD: 'admin'
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+       - pgadmin:/var/lib/pgadmin
+    ports:
+      - 5050:80
+
   api:
     container_name: api
     build: .
@@ -24,4 +37,5 @@ services:
 
 volumes:
   db-data:
+  pgadmin:
 
