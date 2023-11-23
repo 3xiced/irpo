@@ -52,4 +52,3 @@ async def login(
     session: AsyncSession = Depends(get_session),
 ) -> None:
     await authenticate_user(session, user_schema)
-

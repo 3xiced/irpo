@@ -30,6 +30,7 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/onyx_export.h" DESTINATION "include")
 
 # include cpr lib
 target_link_libraries(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:cpr::cpr>")
+target_link_libraries(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:nlohmann_json::nlohmann_json>")
 
 add_subdirectory("include")
 add_subdirectory("src")

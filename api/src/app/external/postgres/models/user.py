@@ -18,7 +18,6 @@ class User(base):
     password = Column(String)
     email = Column(String, unique=True)
     is_blocked = Column(Boolean)  # Статус пользователя - заплокирована ли учетка
-    logged = Column(Boolean)  # Статус пользователя - активен ли в текущий момент
 
 
 class UserDevice(base):

@@ -36,6 +36,7 @@ endif()
 
 include(FetchContent)
 include(cmake/cpr_external.cmake)
+include(cmake/json_external.cmake)
 
 add_subdirectory("onyx-lm")
 add_subdirectory("sample")
