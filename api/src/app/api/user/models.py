@@ -13,5 +13,9 @@ class LoginUser(BaseModel):
     device_sn: str
 
 
+class BlockUser(BaseModel):
+    device_sn: str
+
+
 class ErrorMessage(BaseModel):
     detail: str

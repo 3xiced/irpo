@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 
-from sqlalchemy import or_, select
+from sqlalchemy import or_, select, update
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.exc import IntegrityError
 
@@ -81,3 +81,31 @@ async def add_user_device_association(session: AsyncSession, login: str, device_
     except IntegrityError:
         raise HTTPException(409, "logged in on other device")
     await session.refresh(user_device_model)
+
+
+async def get_device(session: AsyncSession, device_sn: str) -> dict | None:
+    result = await session.execute(
+        select(Device)
+        .where(Device.sn == device_sn)
+    )
+    result = result.scalar_one_or_none()
+    return result.__dict__ if result is not None else None
+
+
+async def block_user(session: AsyncSession, device_sn: str) -> None:
+    device_sn = device_sn.replace("\u0000", "")
+    # Проверяем есть ли вообще серийник в таблице. Если есть, смотрим заблокирован ли уже
+    device_ = await get_device(session, device_sn)
+    if (device_ is None):
+        raise HTTPException(404, "device with this sn not found")
+
+    if device_["is_blocked"] == True:
+        return
+
+    # Если не заблокирован, обновляем запись в таблице на блок
+    await session.execute(
+        update(Device)
+        .where(Device.sn == device_sn)
+        .values(is_blocked=True)
+    )
+    await session.commit()

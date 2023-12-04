@@ -1,13 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from .models import (
+    BlockUser,
     RegisterUser,
     LoginUser,
     ErrorMessage,
 )
 
 from ...external.postgres import get_session
-from .controllers import get_user, create_user
+from .controllers import get_user, create_user, block_user
 from ..auth import (
     authenticate_user,
 )
@@ -52,3 +53,19 @@ async def login(
     session: AsyncSession = Depends(get_session),
 ) -> None:
     await authenticate_user(session, user_schema)
+
+
+@user_router.post(
+    path="/user/block",
+    name="block",
+    response_model=None,
+    status_code=204,
+    responses={
+        400: {"description": "User password incorrect", "model": ErrorMessage},
+    },
+)
+async def block(
+    data: BlockUser,
+    session: AsyncSession = Depends(get_session),
+) -> None:
+    await block_user(session, data.device_sn)
