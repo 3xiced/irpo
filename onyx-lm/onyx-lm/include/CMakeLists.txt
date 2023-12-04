@@ -1,4 +1,6 @@
-set(FILES "${CMAKE_CURRENT_SOURCE_DIR}/onyx.h")
+set(FILES "${CMAKE_CURRENT_SOURCE_DIR}/onyx.h"
+"${CMAKE_CURRENT_SOURCE_DIR}/exceptions.h"
+)
 set(SUBDIRECTORIES "")
 set(RELATIVE_PATH "include")
 

@@ -8,6 +8,7 @@
 
 #include "SMBIOS.h"
 #include "cpr/cpr.h"
+#include "exceptions.h"
 #include "nlohmann/json.hpp"
 
 namespace onyx {
@@ -83,12 +84,12 @@ void Onyx::Auth(const std::string& login, const std::string& password) const {
             break;
         }
         case 409:
-            throw std::runtime_error("Logged in on other device");
+            throw ::onyx::exceptions::AlreadyLoggedIn();
         case 403:
-            throw std::runtime_error("blocked");
+            throw ::onyx::exceptions::Blocked();
         case 404:
         case 400:
-            throw std::runtime_error("wrong user or password");
+            throw ::onyx::exceptions::BadCredentials();
         default:
             throw std::runtime_error("internal error");
     }
