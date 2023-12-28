@@ -3,7 +3,7 @@ version: '3.9'
 services:
   db:
     image: postgres:latest
-    container_name: db
+    container_name: onyx-db
     environment:
       POSTGRES_USER: 'user'
       POSTGRES_PASSWORD: 'secretpassw0rd'
@@ -12,21 +12,21 @@ services:
     ports:
       - 5432:5432
 
-  pgadmin:
-    image: dpage/pgadmin4
-    environment:
-      POSTGRES_USER: 'user'
-      POSTGRES_PASSWORD: 'secretpassw0rd'
-      PGADMIN_DEFAULT_EMAIL: 'pgadmin4@pgadmin.org'
-      PGADMIN_DEFAULT_PASSWORD: 'admin'
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
-    volumes:
-       - pgadmin:/var/lib/pgadmin
-    ports:
-      - 5050:80
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   environment:
+  #     POSTGRES_USER: 'user'
+  #     POSTGRES_PASSWORD: 'secretpassw0rd'
+  #     PGADMIN_DEFAULT_EMAIL: 'pgadmin4@pgadmin.org'
+  #     PGADMIN_DEFAULT_PASSWORD: 'admin'
+  #     PGADMIN_CONFIG_SERVER_MODE: 'False'
+  #   volumes:
+  #      - pgadmin:/var/lib/pgadmin
+  #   ports:
+  #     - 5050:80
 
   api:
-    container_name: api
+    container_name: onyx-api
     build: .
     command: poetry run python src
     env_file: .env
@@ -37,5 +37,5 @@ services:
 
 volumes:
   db-data:
-  pgadmin:
+  # pgadmin:
 

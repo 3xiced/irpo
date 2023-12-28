@@ -100,9 +100,12 @@ std::string Onyx::GetSystemInfo() noexcept { return BaseBoardSerial; }
 void Onyx::Block() const {
     auto device_sn = GetSystemInfo();
     std::cout << "Onyx " << &*this << " invalid, sending block request..." << std::endl;
+    json request_payload = {{"device_sn", device_sn}};
     cpr::Response r = cpr::Post(cpr::Url{__onyx_server_addr + "/api/user/block"},
-                                cpr::Payload{{"device_sn", device_sn}});
+                                cpr::Body{request_payload.dump()},
+                                cpr::Header{{"Content-Type", "application/json"}});
     std::cout << "/api/user/block response status_code: " << r.status_code << std::endl;
+    std::cout << "/api/user/block response message: " << r.text << std::endl;
     switch (r.status_code) {
         case 204:
             abort();
@@ -137,6 +140,16 @@ inline void InitOnyx(const char* onyx_server_addr) {
     std::cout << impl::__onyxes.size() << " onyxes created" << std::endl;
 }
 
+/**
+ * Authenticates the user with the given login and password.
+ *
+ * @param login A pointer to a char array representing the user's login.
+ * @param password A pointer to a char array representing the user's password.
+ *
+ * @throws std::runtime_error if __onyxes is empty.
+ *
+ * @return true if the authentication is successful.
+ */
 inline bool Auth(const char* login, const char* password) {
     if (impl::__onyxes.empty())
         throw std::runtime_error("Onyx not initialized. Call onyx::InitOnyx() first.");
